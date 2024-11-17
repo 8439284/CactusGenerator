@@ -1,2 +1,2 @@
 A plugin originally created to generate cactus with decoration.
-ow it's just some random quirky gadgets.
+Now it's just some random quirky gadgets.
