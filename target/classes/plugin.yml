@@ -1,0 +1,29 @@
+name: CactusGenerator
+version: '1.0-SNAPSHOT'
+main: org.ajls.cactusgenerator.CactusGenerator
+api-version: '1.21'
+commands:
+  cactus:
+    description: Give you a cactus that generates cactus
+    usage: /<command>
+    default: op
+  sand:
+    description: Give you a sand that floats
+    usage: /<command>
+    default: op
+  silk:
+    description: Give you a stick that break blocks without causing updates
+    usage: /<command>
+    default: op
+  silent:
+    description: Toggle silent mode in which placing or breaking blocks won't cause block updates
+    usage: /<command>
+    default: op
+  float:
+    description: Make your item in hand float like floating sand
+    usage: /<command>
+    default: op
+  microhid:
+    description: Micro High-Intensity Discharge!!!
+    usage: /<command>
+    default: op

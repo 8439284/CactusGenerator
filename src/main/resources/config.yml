@@ -1,0 +1,11 @@
+cactus_generator:
+  height:
+    - 3
+    - 4
+  top:
+#    - 'OAK_PLANKS'
+#    - 'ACACIA_PLANKS'
+    - 'CRIMSON_ROOTS'
+    - 'SHORT_GRASS'
+#    - 'SEAGRASS'
+    - 'SEA_PICKLE'
