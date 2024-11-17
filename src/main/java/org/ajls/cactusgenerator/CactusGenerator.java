@@ -24,7 +24,7 @@ public final class CactusGenerator extends JavaPlugin {
         getCommand("silent").setExecutor(new Silent());
         getCommand("float").setExecutor(new Float());
         getCommand("microhid").setExecutor(new MicroHID());
-
+        getCommand("r").setExecutor(new R());
     }
 
     @Override

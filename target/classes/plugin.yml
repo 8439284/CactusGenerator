@@ -27,3 +27,7 @@ commands:
     description: Micro High-Intensity Discharge!!!
     usage: /<command>
     default: op
+  r:
+    description: Reload server
+    usage: /<command>
+    default: op
