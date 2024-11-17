@@ -1,22 +1,18 @@
 package org.ajls.cactusgenerator;
 
+import org.ajls.cactusgenerator.cosmetics.Bloody;
 import org.ajls.cactusgenerator.maths.Cylinder;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.ajls.cactusgenerator.utils.EventU;
+import org.ajls.cactusgenerator.utils.RayTraceU;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Marker;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -26,6 +22,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class MyListener implements Listener {
@@ -172,10 +169,54 @@ public class MyListener implements Listener {
         }
 
     }
-
-    @EventHandler
+    HashSet<UUID> entityBloodParticles = new HashSet<>();
+    @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
+        UUID entityUUID = entity.getUniqueId();
+        World world = entity.getWorld();
+        Location location = entity.getLocation();
+        Location damageLocation = location.clone().add(0, 1, 0);
+        double finalDamage = event.getFinalDamage();
+        double realFinalDamage = EventU.getFinalDamage(event);
+
+        if (!entityBloodParticles.remove(entityUUID)) {
+
+            //originally 100 and use redstone wire as particle
+//            world.spawnParticle(Particle.BLOCK, damageLocation, (int) (realFinalDamage * 10), 0, 0, 0, 114514, Material.REDSTONE_BLOCK.createBlockData());  //Material.REDSTONE.createBlockData()  Bukkit.createBlockData(Material.REDSTONE)
+            Bloody.bleed(damageLocation, realFinalDamage);
+//            for (int i = 0; i < realFinalDamage; i++) {
+//                Item bloodItem = world.dropItemNaturally(damageLocation, Bloody.getRandomBloodyItem());
+//                bloodItem.setCanPlayerPickup(false);
+//            }
+
+        }
+//        BlockData blockData = BlockData
+//        Bukkit.createBlockData(Material.PINK_CONCRETE)
+//        entity.getLocation().getBlock().breakNaturally(true);
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        Entity entity = event.getEntity();
+        UUID entityUUID = entity.getUniqueId();
+        Entity damagerEntity = event.getDamager();
+        World world = entity.getWorld();
+        Location location = entity.getLocation();
+        double finalDamage = event.getFinalDamage();
+        double realFinalDamage = EventU.getFinalDamage(event);
+        Location damageLocation = RayTraceU.getRayInterSection(damagerEntity, entity, 114514);
+        if (damageLocation == null) {
+            damageLocation = location.clone().add(0, 1,0);
+        }
+
+        entityBloodParticles.add(entityUUID);
+//        world.spawnParticle(Particle.BLOCK, damageLocation, (int) (realFinalDamage * 10), 0, 0, 0, 114514, Material.REDSTONE_BLOCK.createBlockData());  //Material.REDSTONE.createBlockData()  Bukkit.createBlockData(Material.REDSTONE)  //location.add(0, 1, 0)
+//        for (int i = 0; i < realFinalDamage; i++) {
+//            Item bloodItem = world.dropItemNaturally(damageLocation, Bloody.getRandomBloodyItem());
+//            bloodItem.setCanPlayerPickup(false);
+//        }
+        Bloody.bleed(damageLocation, realFinalDamage);
 
     }
 }
