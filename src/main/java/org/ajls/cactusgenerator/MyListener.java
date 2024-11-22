@@ -1,6 +1,8 @@
 package org.ajls.cactusgenerator;
 
+import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.ajls.cactusgenerator.cosmetics.Bloody;
+import org.ajls.cactusgenerator.events.EntityAndLiquidEvent;
 import org.ajls.cactusgenerator.maths.Cylinder;
 import org.ajls.cactusgenerator.utils.EventU;
 import org.ajls.cactusgenerator.utils.RayTraceU;
@@ -26,6 +28,10 @@ import java.util.HashSet;
 import java.util.UUID;
 
 public class MyListener implements Listener {
+    @EventHandler
+    public void onEntityMove(EntityMoveEvent event) {
+        Bukkit.broadcastMessage("test");
+    }
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
@@ -164,12 +170,14 @@ public class MyListener implements Listener {
         if (ItemStackModify.containsPersistentData(itemStack, NameSpacedKeys.MICRO_HID, PersistentDataType.BOOLEAN)) {
 //            player.getLocation().getWorld().strikeLightningEffect(player.getLocation());
             for (Entity entity: Cylinder.getNearbyCylindricalEntities(player, 5, 1, 114514, 0)) {
-                entity.getWorld().strikeLightning(entity.getLocation());
+                if (entity instanceof LivingEntity) {  //exclude items
+                    entity.getWorld().strikeLightning(entity.getLocation());
+                }
             }
         }
 
     }
-    HashSet<UUID> entityBloodParticles = new HashSet<>();
+    public static HashSet<UUID> entityBloodParticles = new HashSet<>();
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
@@ -184,7 +192,13 @@ public class MyListener implements Listener {
 
             //originally 100 and use redstone wire as particle
 //            world.spawnParticle(Particle.BLOCK, damageLocation, (int) (realFinalDamage * 10), 0, 0, 0, 114514, Material.REDSTONE_BLOCK.createBlockData());  //Material.REDSTONE.createBlockData()  Bukkit.createBlockData(Material.REDSTONE)
-            Bloody.bleed(damageLocation, realFinalDamage);
+            if (!event.isCancelled()) {
+                if (entity instanceof LivingEntity){  //exclude items
+                    Bloody.bleed(damageLocation, realFinalDamage);
+                }
+
+            }
+
 //            for (int i = 0; i < realFinalDamage; i++) {
 //                Item bloodItem = world.dropItemNaturally(damageLocation, Bloody.getRandomBloodyItem());
 //                bloodItem.setCanPlayerPickup(false);
@@ -198,25 +212,53 @@ public class MyListener implements Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        Entity entity = event.getEntity();
-        UUID entityUUID = entity.getUniqueId();
-        Entity damagerEntity = event.getDamager();
-        World world = entity.getWorld();
-        Location location = entity.getLocation();
-        double finalDamage = event.getFinalDamage();
-        double realFinalDamage = EventU.getFinalDamage(event);
-        Location damageLocation = RayTraceU.getRayInterSection(damagerEntity, entity, 114514);
-        if (damageLocation == null) {
-            damageLocation = location.clone().add(0, 1,0);
+//        Entity entity = event.getEntity();
+//        UUID entityUUID = entity.getUniqueId();
+//        Entity damagerEntity = event.getDamager();
+//        World world = entity.getWorld();
+//        Location location = entity.getLocation();
+//        double finalDamage = event.getFinalDamage();
+//        double realFinalDamage = EventU.getFinalDamage(event);
+//        Location damageLocation = RayTraceU.getRayInterSection(damagerEntity, entity, 114514);
+//        if (damageLocation == null) {
+//            damageLocation = location.clone().add(0, 1,0);
+//        }
+//
+//        entityBloodParticles.add(entityUUID);
+////        world.spawnParticle(Particle.BLOCK, damageLocation, (int) (realFinalDamage * 10), 0, 0, 0, 114514, Material.REDSTONE_BLOCK.createBlockData());  //Material.REDSTONE.createBlockData()  Bukkit.createBlockData(Material.REDSTONE)  //location.add(0, 1, 0)
+////        for (int i = 0; i < realFinalDamage; i++) {
+////            Item bloodItem = world.dropItemNaturally(damageLocation, Bloody.getRandomBloodyItem());
+////            bloodItem.setCanPlayerPickup(false);
+////        }
+//        Bloody.bleed(damageLocation, realFinalDamage);
+        if (!event.isCancelled()) {
+            if (event.getEntity() instanceof LivingEntity){  //exclude items
+                Bloody.damageByEntityBleed(event);
+            }
         }
 
-        entityBloodParticles.add(entityUUID);
-//        world.spawnParticle(Particle.BLOCK, damageLocation, (int) (realFinalDamage * 10), 0, 0, 0, 114514, Material.REDSTONE_BLOCK.createBlockData());  //Material.REDSTONE.createBlockData()  Bukkit.createBlockData(Material.REDSTONE)  //location.add(0, 1, 0)
-//        for (int i = 0; i < realFinalDamage; i++) {
-//            Item bloodItem = world.dropItemNaturally(damageLocation, Bloody.getRandomBloodyItem());
-//            bloodItem.setCanPlayerPickup(false);
-//        }
-        Bloody.bleed(damageLocation, realFinalDamage);
 
+    }
+
+    @EventHandler
+    public void onEntityAndLiquid(EntityAndLiquidEvent event) {
+        Entity entity = event.getEntity();
+        World world = entity.getWorld();
+        Location location = entity.getLocation();
+        Material material = event.getMaterial();
+        if (material == Material.WATER) {
+//            Bukkit.broadcastMessage("water");
+            if (entity instanceof Player player) {
+                player.sendMessage("water");
+                Item wateryItem = world.dropItem(location, new ItemStack(Material.LIGHT_BLUE_CANDLE));
+                wateryItem.setCanPlayerPickup(false);
+                wateryItem.setVelocity(location.getDirection().multiply(-1));
+                // entityMoveEvent implement
+
+
+            }
+
+            //splash and velocity, ripples, water drip 1- e^-x
+        }
     }
 }

@@ -84,7 +84,7 @@ public class ItemStackModify {
 
     public static ItemStack setAttributePlayerBlockRange(ItemStack itemStack, int amountPts) {
         if (itemStack == null) return itemStack;
-        if (!itemStack.hasItemMeta()) return itemStack;
+//        if (!itemStack.hasItemMeta()) return itemStack;
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.addAttributeModifier(Attribute.PLAYER_BLOCK_INTERACTION_RANGE, new AttributeModifier("generic.playerBlockRange", amountPts, AttributeModifier.Operation.ADD_NUMBER));

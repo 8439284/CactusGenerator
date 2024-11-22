@@ -2,6 +2,7 @@ package org.ajls.cactusgenerator.utils;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RayTraceU {
+    //all by gpt
 
 
     /**
@@ -75,6 +77,11 @@ public class RayTraceU {
 
     public static Location getRayInterSection(Entity start, Entity entity, double range) {
         Location location = start.getLocation();
+        if (start instanceof LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) start;
+            location = livingEntity.getEyeLocation();
+        }
+
         return getRayIntersection(location, location.getDirection(), entity, range);
     }
 

@@ -2,6 +2,8 @@ package org.ajls.cactusgenerator;
 
 import org.ajls.cactusgenerator.Commands.*;
 import org.ajls.cactusgenerator.Commands.Float;
+import org.ajls.cactusgenerator.events.EntityAndLiquidEventTrigger;
+import org.ajls.lib.utils.BukkitU;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CactusGenerator extends JavaPlugin {
@@ -18,6 +20,8 @@ public final class CactusGenerator extends JavaPlugin {
         saveDefaultConfig();
         // Plugin startup logic
         getServer().getPluginManager().registerEvents(new MyListener(), this);
+//        BukkitU.registerEvents(new EntityAndLiquidEventTrigger(), this);
+        getServer().getPluginManager().registerEvents(new EntityAndLiquidEventTrigger(), this);
         getCommand("cactus").setExecutor(new Cactus());
         getCommand("sand").setExecutor(new Sand());
         getCommand("silk").setExecutor(new Silk());
