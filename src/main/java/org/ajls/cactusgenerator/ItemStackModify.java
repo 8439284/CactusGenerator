@@ -94,7 +94,7 @@ public class ItemStackModify {
 
     public static ItemStack setPersistentData(ItemStack itemStack, NamespacedKey namespacedKey, PersistentDataType persistentDataType, Object value) {
         if (itemStack == null) return itemStack;
-        if (!itemStack.hasItemMeta()) return itemStack;
+//        if (!itemStack.hasItemMeta()) return itemStack;
 
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.getPersistentDataContainer().set(namespacedKey, persistentDataType, value);

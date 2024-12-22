@@ -19,9 +19,12 @@ public class Bloody {
     public static void bleed(Location location, double damage) {
         World world = location.getWorld();
         Random random = new Random();
-        int lightBloodCount = (int) (damage * 10 + 1);  // if damage * 10 = 2, it will be 3(0,1,2 for random)
+        int lightBloodCount = (int) ((damage * 10) + 1);  // if damage * 10 = 2, it will be 3(0,1,2 for random)
         int generateLightBloodCount = random.nextInt(lightBloodCount);
         int generateDarkBloodCount = (int) ((damage * 10 - generateLightBloodCount) * 10);
+        if (generateDarkBloodCount <= 0) {
+            generateDarkBloodCount = 1;
+        }
         world.spawnParticle(Particle.BLOCK, location, generateLightBloodCount, 0, 0, 0, 114514, Material.REDSTONE_BLOCK.createBlockData());
         world.spawnParticle(Particle.BLOCK, location, generateDarkBloodCount, 0, 0, 0, 114514, Material.REDSTONE_WIRE.createBlockData());
 //        Bukkit.broadcastMessage("light" + String.valueOf(generateLightBloodCount));
@@ -30,6 +33,7 @@ public class Bloody {
         for (int i = 0; i < damage; i++) {
             Item bloodItem = world.dropItemNaturally(location, Bloody.getRandomBloodyItem());
             bloodItem.setCanPlayerPickup(false);
+            bloodItem.setTicksLived(5400); //4min  4800   4.5min 5400
         }
 
 //        world.spawnParticle(Particle.BLOCK, location, (int) (realFinalDamage * 10), 0, 0, 0, 114514, Material.REDSTONE_BLOCK.createBlockData());  //Material.REDSTONE.createBlockData()  Bukkit.createBlockData(Material.REDSTONE)
@@ -91,6 +95,8 @@ public class Bloody {
         materials.add(Material.NETHER_BRICK);
         materials.add(Material.RED_NETHER_BRICKS);
         materials.add(Material.FIRE_CORAL);
+        materials.add(Material.FIRE_CORAL_FAN);
+        materials.add(Material.FIRE_CORAL_BLOCK);
         materials.add(Material.RED_CONCRETE);
         materials.add(Material.RED_CONCRETE_POWDER);
         Random random = new Random();

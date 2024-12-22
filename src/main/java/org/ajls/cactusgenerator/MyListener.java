@@ -30,7 +30,7 @@ import java.util.UUID;
 public class MyListener implements Listener {
     @EventHandler
     public void onEntityMove(EntityMoveEvent event) {
-        Bukkit.broadcastMessage("test");
+//        Bukkit.broadcastMessage("test");
     }
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
@@ -193,10 +193,11 @@ public class MyListener implements Listener {
             //originally 100 and use redstone wire as particle
 //            world.spawnParticle(Particle.BLOCK, damageLocation, (int) (realFinalDamage * 10), 0, 0, 0, 114514, Material.REDSTONE_BLOCK.createBlockData());  //Material.REDSTONE.createBlockData()  Bukkit.createBlockData(Material.REDSTONE)
             if (!event.isCancelled()) {
-                if (entity instanceof LivingEntity){  //exclude items
-                    Bloody.bleed(damageLocation, realFinalDamage);
+                if (event.getDamage() > 0.1) {  //mw kb damage
+                    if (entity instanceof LivingEntity){  //exclude items
+                        Bloody.bleed(damageLocation, realFinalDamage);
+                    }
                 }
-
             }
 
 //            for (int i = 0; i < realFinalDamage; i++) {
@@ -252,8 +253,10 @@ public class MyListener implements Listener {
                 player.sendMessage("water");
                 Item wateryItem = world.dropItem(location, new ItemStack(Material.LIGHT_BLUE_CANDLE));
                 wateryItem.setCanPlayerPickup(false);
-                wateryItem.setVelocity(location.getDirection().multiply(-1));
+                wateryItem.setVelocity(player.getVelocity().multiply(-1));
+                wateryItem.setTicksLived(5800);  //4min50s
                 // entityMoveEvent implement
+                //too speedy candle stuck in water because player enters water then spawns item
 
 
             }
