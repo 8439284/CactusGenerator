@@ -1,5 +1,6 @@
 package org.ajls.cactusgenerator;
 
+import org.ajls.lib.utils.ItemStackU;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -76,13 +77,19 @@ public class ItemStackModify {
     }
 
     public static ItemStack setAttributeAttackDamage(ItemStack itemstack, int amountPts) {
+        return ItemStackU.setAttributeAttackDamage(itemstack, amountPts);
+        /*
         ItemMeta meta = itemstack.getItemMeta();
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attackDamage", amountPts, AttributeModifier.Operation.ADD_NUMBER));
         itemstack.setItemMeta(meta);
         return itemstack;
+
+         */
     }
 
     public static ItemStack setAttributePlayerBlockRange(ItemStack itemStack, int amountPts) {
+        return ItemStackU.setAttributePlayerBlockRange(itemStack, amountPts);
+        /*
         if (itemStack == null) return itemStack;
 //        if (!itemStack.hasItemMeta()) return itemStack;
 
@@ -90,6 +97,8 @@ public class ItemStackModify {
         itemMeta.addAttributeModifier(Attribute.PLAYER_BLOCK_INTERACTION_RANGE, new AttributeModifier("generic.playerBlockRange", amountPts, AttributeModifier.Operation.ADD_NUMBER));
         itemStack.setItemMeta(itemMeta);
         return itemStack;
+
+         */
     }
 
     public static ItemStack setPersistentData(ItemStack itemStack, NamespacedKey namespacedKey, PersistentDataType persistentDataType, Object value) {

@@ -180,6 +180,7 @@ public class MyListener implements Listener {
     public static HashSet<UUID> entityBloodParticles = new HashSet<>();
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDamage(EntityDamageEvent event) {
+        //event instance of damaged by entity
         Entity entity = event.getEntity();
         UUID entityUUID = entity.getUniqueId();
         World world = entity.getWorld();
@@ -195,7 +196,7 @@ public class MyListener implements Listener {
             if (!event.isCancelled()) {
                 if (event.getDamage() > 0.1) {  //mw kb damage
                     if (entity instanceof LivingEntity){  //exclude items
-                        Bloody.bleed(damageLocation, realFinalDamage);
+                        Bloody.bleed(damageLocation, realFinalDamage, entity);
                     }
                 }
             }
