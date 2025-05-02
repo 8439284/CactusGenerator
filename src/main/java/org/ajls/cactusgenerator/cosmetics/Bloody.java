@@ -10,6 +10,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BundleMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,6 +20,53 @@ import java.util.Random;
 import java.util.UUID;
 
 public class Bloody {
+    public static void processBleedEvent(EntityDamageEvent event) {
+        //event instance of damaged by entity
+        Entity entity = event.getEntity();
+        UUID entityUUID = entity.getUniqueId();
+        World world = entity.getWorld();
+        Location location = entity.getLocation();
+        Location damageLocation = location.clone().add(0, 1, 0);
+        double finalDamage = event.getFinalDamage();
+        double realFinalDamage = EventU.getFinalDamage(event);
+
+        if (event instanceof EntityDamageByEntityEvent) {
+            EntityDamageByEntityEvent entityDamageByEntityEvent = (EntityDamageByEntityEvent) event;
+            if (!event.isCancelled()) {
+                if (event.getEntity() instanceof LivingEntity){  //exclude items
+                    Bloody.damageByEntityBleed(entityDamageByEntityEvent);
+                }
+            }
+        }
+        else {
+//            if (!entityBloodParticles.remove(entityUUID)) {
+//
+//
+//            }
+
+            //originally 100 and use redstone wire as particle
+//            world.spawnParticle(Particle.BLOCK, damageLocation, (int) (realFinalDamage * 10), 0, 0, 0, 114514, Material.REDSTONE_BLOCK.createBlockData());  //Material.REDSTONE.createBlockData()  Bukkit.createBlockData(Material.REDSTONE)
+            if (!event.isCancelled()) {
+                if (event.getDamage() > 0.1) {  //mw kb damage
+                    if (entity instanceof LivingEntity){  //exclude items
+                        Bloody.bleed(damageLocation, realFinalDamage, entity);
+                    }
+                }
+            }
+
+//            for (int i = 0; i < realFinalDamage; i++) {
+//                Item bloodItem = world.dropItemNaturally(damageLocation, Bloody.getRandomBloodyItem());
+//                bloodItem.setCanPlayerPickup(false);
+//            }
+        }
+
+
+//        BlockData blockData = BlockData
+//        Bukkit.createBlockData(Material.PINK_CONCRETE)
+//        entity.getLocation().getBlock().breakNaturally(true);
+    }
+
+
     public static void bleed(Location location, double damage, Entity entity) {
         World world = location.getWorld();
         Random random = new Random();
@@ -82,7 +130,8 @@ public class Bloody {
             damageLocation = location.clone().add(0, 1,0);
         }
 
-        MyListener.entityBloodParticles.add(entityUUID);
+//        MyListener.entityBloodParticles.add(entityUUID);
+
 //        world.spawnParticle(Particle.BLOCK, damageLocation, (int) (realFinalDamage * 10), 0, 0, 0, 114514, Material.REDSTONE_BLOCK.createBlockData());  //Material.REDSTONE.createBlockData()  Bukkit.createBlockData(Material.REDSTONE)  //location.add(0, 1, 0)
 //        for (int i = 0; i < realFinalDamage; i++) {
 //            Item bloodItem = world.dropItemNaturally(damageLocation, Bloody.getRandomBloodyItem());
