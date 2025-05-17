@@ -2,6 +2,7 @@ package org.ajls.cactusgenerator.cosmetics;
 
 import org.ajls.cactusgenerator.MyListener;
 import org.ajls.cactusgenerator.advanced.RandomArrayList;
+import org.ajls.cactusgenerator.utils.DisplayItemU;
 import org.ajls.cactusgenerator.utils.EventU;
 import org.ajls.cactusgenerator.utils.RayTraceU;
 import org.bukkit.*;
@@ -94,8 +95,11 @@ public class Bloody {
             Item bloodItem = world.dropItemNaturally(location, Bloody.getRandomBloodyItem());
             bloodItem.setVelocity(bloodItem.getVelocity().add(entity.getVelocity()));
             bloodItem.setCanPlayerPickup(false);
+            DisplayItemU.setDisplayItem(bloodItem);
             bloodItem.setTicksLived(5400); //4min  4800   4.5min 5400
         }
+
+
 
 //        world.spawnParticle(Particle.BLOCK, location, (int) (realFinalDamage * 10), 0, 0, 0, 114514, Material.REDSTONE_BLOCK.createBlockData());  //Material.REDSTONE.createBlockData()  Bukkit.createBlockData(Material.REDSTONE)
 //        for (int i = 0; i < realFinalDamage; i++) {

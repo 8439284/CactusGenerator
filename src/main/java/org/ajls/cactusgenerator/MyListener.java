@@ -4,6 +4,7 @@ import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.ajls.cactusgenerator.cosmetics.Bloody;
 import org.ajls.cactusgenerator.events.EntityAndLiquidEvent;
 import org.ajls.cactusgenerator.maths.Cylinder;
+import org.ajls.cactusgenerator.utils.DisplayItemU;
 import org.ajls.cactusgenerator.utils.EventU;
 import org.ajls.cactusgenerator.utils.RayTraceU;
 import org.bukkit.*;
@@ -15,6 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -235,6 +237,15 @@ public class MyListener implements Listener {
             }
 
             //splash and velocity, ripples, water drip 1- e^-x
+        }
+    }
+
+    @EventHandler
+    public void onInventoryPickupItem(InventoryPickupItemEvent event) {
+        Item item = event.getItem();
+        Inventory inventory = event.getInventory();
+        if (DisplayItemU.isDisplayItem(item)) {
+            event.setCancelled(true);
         }
     }
 }
