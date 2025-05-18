@@ -5,6 +5,7 @@ import org.ajls.cactusgenerator.advanced.RandomArrayList;
 import org.ajls.cactusgenerator.utils.DisplayItemU;
 import org.ajls.cactusgenerator.utils.EventU;
 import org.ajls.cactusgenerator.utils.RayTraceU;
+import org.ajls.megawallsclasses.CustomEventsOld;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -69,6 +70,7 @@ public class Bloody {
 
 
     public static void bleed(Location location, double damage, Entity entity) {
+        boolean isPlayer = entity instanceof Player;
         World world = location.getWorld();
         Random random = new Random();
         int lightBloodCount = (int) ((damage * 10) + 1);  // if damage * 10 = 2, it will be 3(0,1,2 for random)
@@ -97,6 +99,11 @@ public class Bloody {
             bloodItem.setCanPlayerPickup(false);
             DisplayItemU.setDisplayItem(bloodItem);
             bloodItem.setTicksLived(5400); //4min  4800   4.5min 5400
+
+            if (isPlayer) {
+                CustomEventsOld.getPlayer_deathItems().put(entity.getUniqueId(), bloodItem);
+            }
+
         }
 
 
