@@ -95,7 +95,7 @@ public class Bloody {
 //        Bukkit.broadcastMessage("total" + String.valueOf(generateDarkBloodCount / 100 + generateLightBloodCount / 10));
         for (int i = 0; i < damage; i++) {
             Item bloodItem = world.dropItemNaturally(location, Bloody.getRandomBloodyItem());
-            bloodItem.setVelocity(bloodItem.getVelocity().add(entity.getVelocity()));
+            bloodItem.setVelocity(bloodItem.getVelocity().add(entity.getVelocity()));  //todo 改成玩家受伤后的vel试试，目前因为监听事件，玩家的vel是受伤前的，可以来一个delaytask，看看效果怎么样 当然hb雷是先加Kb再扣血所以会显得血飞很远
             bloodItem.setCanPlayerPickup(false);
             DisplayItemU.setDisplayItem(bloodItem);
             bloodItem.setTicksLived(5400); //4min  4800   4.5min 5400
@@ -165,6 +165,11 @@ public class Bloody {
         materials.add(Material.RED_MUSHROOM);
         materials.add(Material.RED_MUSHROOM_BLOCK);
 
+        //mangrove
+
+        materials.add(Material.BEETROOT);
+        materials.add(Material.BEETROOT_SOUP);
+
         materials.add(Material.REDSTONE);
         materials.add(Material.REDSTONE_BLOCK);
         materials.add(Material.REDSTONE_TORCH);
@@ -185,6 +190,9 @@ public class Bloody {
         materials.add(Material.RED_NETHER_BRICKS);
         materials.add(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE);
 
+        materials.add(Material.WEEPING_VINES);  //todo 后面加的，如果加plant会有报错吗
+        materials.add(Material.CRIMSON_FUNGUS);
+
         materials.add(Material.FIRE_CORAL);
         materials.add(Material.FIRE_CORAL_FAN);
         materials.add(Material.FIRE_CORAL_BLOCK);
@@ -194,6 +202,9 @@ public class Bloody {
 
         materials.add(Material.RED_TERRACOTTA);
         materials.add(Material.RED_GLAZED_TERRACOTTA);
+
+        //bloody items加腐肉
+
         Random random = new Random();
 //        int itemIndex = random.nextInt(7);
 //        ItemStack itemStack = null; // = new ItemStack(Material.AIR);
