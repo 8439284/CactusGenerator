@@ -1,11 +1,10 @@
 package org.ajls.cactusgenerator.cosmetics;
 
-import org.ajls.cactusgenerator.MyListener;
 import org.ajls.cactusgenerator.advanced.RandomArrayList;
 import org.ajls.cactusgenerator.utils.DisplayItemU;
 import org.ajls.cactusgenerator.utils.EventU;
 import org.ajls.cactusgenerator.utils.RayTraceU;
-import org.ajls.megawallsclasses.CustomEventsOld;
+import org.ajls.lib.advanced.HaxhMap;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -14,12 +13,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BundleMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class Bloody {
     public static void processBleedEvent(EntityDamageEvent event) {
@@ -68,6 +65,12 @@ public class Bloody {
 //        entity.getLocation().getBlock().breakNaturally(true);
     }
 
+    public static List<HaxhMap<UUID, Item>> player_deathItemsList = new ArrayList<>();
+
+    public static void registerPlayerDeathItems(HaxhMap<UUID, Item> player_deathItems) {
+        player_deathItemsList.add(player_deathItems);
+    }
+
 
     public static void bleed(Location location, double damage, Entity entity) {
         boolean isPlayer = entity instanceof Player;
@@ -101,7 +104,12 @@ public class Bloody {
             bloodItem.setTicksLived(5400); //4min  4800   4.5min 5400
 
             if (isPlayer) {
-                CustomEventsOld.getPlayer_deathItems().put(entity.getUniqueId(), bloodItem);
+                Iterator<HaxhMap<UUID, Item>> it = player_deathItemsList.iterator();
+                while (it.hasNext()) {
+                    HaxhMap<UUID, Item> player_deathItems = it.next();
+                    player_deathItems.put(entity.getUniqueId(), bloodItem);
+                }
+//                CustomEventsOld.getPlayer_deathItems().put(entity.getUniqueId(), bloodItem);
             }
 
         }
